@@ -59,6 +59,7 @@ namespace Lab5
                     Random random = new();
                     circle.X = random.Next(20, 580);
                     circle.Y = random.Next(20, 380);
+                    circle.Timer = random.Next(60, 150);
                 };
             }
         }
