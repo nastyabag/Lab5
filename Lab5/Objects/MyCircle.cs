@@ -12,10 +12,12 @@ namespace Lab5.Objects
     {
         public int Timer;
 
-        public Action<MyCircle> ;
+        public Action<MyCircle> OnDecreaseTimer;
 
         public MyCircle(float x, float y, float angle) : base(x, y, angle)
         {
+            Random random = new();
+            Timer = random.Next(60, 150);
         }
 
         public override void Render(Graphics g)
@@ -23,6 +25,12 @@ namespace Lab5.Objects
             g.FillEllipse(
                 new SolidBrush(Color.Green),
                 -20, -20, 40, 40
+                );
+            g.DrawString(
+                $"{Timer}",
+                new Font("Verdana", 8),
+                new SolidBrush(Color.Green),
+                15, 15
                 );
         }
 
@@ -38,7 +46,7 @@ namespace Lab5.Objects
             Timer--;
             if (Timer < 0)
             {
-
+                OnDecreaseTimer(this as MyCircle);
             }
         }
     }

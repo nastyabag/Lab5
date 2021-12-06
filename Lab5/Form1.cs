@@ -14,14 +14,17 @@ namespace Lab5
     public partial class Form1 : Form
     {
         List<BaseObject> objects = new();
+        List<MyCircle> circles = new();
         Player player;
         Marker? marker;
+        ushort score = 0;
 
         public Form1()
         {
             InitializeComponent();
 
             player = new Player(pbMain.Width / 2, pbMain.Height / 2, 0);
+            objects.Add(player);
 
             player.OnOverlap += (p, obj) =>
             {
@@ -34,12 +37,31 @@ namespace Lab5
                 marker = null;
             };
 
-            Random random = new();
-            objects.Add(new MyCircle(random.Next(20, 580), random.Next(20, 480), 0));
-            objects.Add(new MyCircle(random.Next(20, 580), random.Next(20, 380), 0));
+            player.OnCircleOverlap += (circle) =>
+            {
+                Random random = new();
+                circle.X = random.Next(20, 580);
+                circle.Y = random.Next(20, 380);
 
-            objects.Add(player);
-            
+                score++;
+                lblScore.Text = $"Счёт: {score}";
+            };
+
+            Random random = new();
+            circles.Add(new MyCircle(random.Next(20, 580), random.Next(20, 480), 0));
+            circles.Add(new MyCircle(random.Next(20, 580), random.Next(20, 380), 0));
+
+            foreach (var item in circles.ToList())
+            {
+                item.OnDecreaseTimer += (circle) =>
+                {
+                    Random random = new();
+                    circle.X = random.Next(20, 580);
+                    circle.Y = random.Next(20, 380);
+
+                    circle.Timer = random.Next(60, 150);
+                };
+            }
         }
 
         private void pbMain_Paint(object sender, PaintEventArgs e)
@@ -49,10 +71,20 @@ namespace Lab5
             g.Clear(Color.White);
 
             updatePlayer();
+            UpdateCircles();
 
             foreach (var obj in objects.ToList())
             {
                 if (obj != player && player.Overlaps(obj, g))
+                {
+                    player.Overlap(obj);
+                    obj.Overlap(player);
+                }
+            }
+
+            foreach (var obj in circles.ToList())
+            {
+                if (player.Overlaps(obj, g))
                 {
                     player.Overlap(obj);
                     obj.Overlap(player);
@@ -64,11 +96,25 @@ namespace Lab5
                 g.Transform = obj.GetTransform();
                 obj.Render(g);
             }
+
+            foreach (var circle in circles)
+            {
+                g.Transform = circle.GetTransform();
+                circle.Render(g);
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             pbMain.Invalidate();
+        }
+
+        private void UpdateCircles()
+        {
+            foreach (var circle in circles)
+            {
+                circle.DecreaseTimer();
+            }
         }
 
         private void updatePlayer()
