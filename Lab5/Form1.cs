@@ -1,21 +1,19 @@
-﻿using System;
+﻿using Lab5.Objects;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Lab5.Objects;
 
 namespace Lab5
 {
     public partial class Form1 : Form
     {
-        List<BaseObject> objects = new();
-        List<MyCircle> circles = new();
-        Player player;
+        readonly List<BaseObject> objects = new();
+        //лист кругов
+        readonly List<MyCircle> circles = new();
+
+        readonly Player player;
         Marker? marker;
         ushort score = 0;
 
@@ -37,11 +35,13 @@ namespace Lab5
                 marker = null;
             };
 
+            //делегат пересечения игрока с кругом
             player.OnCircleOverlap += (circle) =>
             {
                 Random random = new();
                 circle.X = random.Next(20, 580);
                 circle.Y = random.Next(20, 380);
+                circle.Timer = random.Next(60, 150);
 
                 score++;
                 lblScore.Text = $"Счёт: {score}";
@@ -53,13 +53,12 @@ namespace Lab5
 
             foreach (var item in circles.ToList())
             {
+                //делегат окончания таймера
                 item.OnDecreaseTimer += (circle) =>
                 {
                     Random random = new();
                     circle.X = random.Next(20, 580);
                     circle.Y = random.Next(20, 380);
-
-                    circle.Timer = random.Next(60, 150);
                 };
             }
         }
@@ -84,6 +83,7 @@ namespace Lab5
 
             foreach (var obj in circles.ToList())
             {
+                //проверка пересечения игрока с кругами
                 if (player.Overlaps(obj, g))
                 {
                     player.Overlap(obj);
@@ -97,6 +97,7 @@ namespace Lab5
                 obj.Render(g);
             }
 
+            //отрисовка кругов
             foreach (var circle in circles)
             {
                 g.Transform = circle.GetTransform();
@@ -109,6 +110,7 @@ namespace Lab5
             pbMain.Invalidate();
         }
 
+        //метод обновления круга
         private void UpdateCircles()
         {
             foreach (var circle in circles)

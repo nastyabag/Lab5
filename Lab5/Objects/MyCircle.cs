@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab5.Objects
 {
@@ -12,6 +8,7 @@ namespace Lab5.Objects
     {
         public int Timer;
 
+        //делегат окончания таймера
         public Action<MyCircle> OnDecreaseTimer;
 
         public MyCircle(float x, float y, float angle) : base(x, y, angle)
@@ -41,12 +38,13 @@ namespace Lab5.Objects
             return path;
         }
 
+        //метод вызова делегата
         public void DecreaseTimer()
         {
             Timer--;
             if (Timer < 0)
             {
-                OnDecreaseTimer(this as MyCircle);
+                OnDecreaseTimer(this);
             }
         }
     }

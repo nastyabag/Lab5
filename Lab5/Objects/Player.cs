@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab5.Objects
 {
     public class Player : BaseObject
     {
         public Action<Marker> OnMarkerOverlap;
+        //делегат пересечения игрока с кругом
         public Action<MyCircle> OnCircleOverlap;
 
         public float vX;

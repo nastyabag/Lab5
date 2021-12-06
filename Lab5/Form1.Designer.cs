@@ -56,6 +56,7 @@
             // 
             this.txtLog.Location = new System.Drawing.Point(618, 12);
             this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
             this.txtLog.Size = new System.Drawing.Size(200, 400);
             this.txtLog.TabIndex = 1;
             this.txtLog.Text = "";
@@ -77,8 +78,10 @@
             this.Controls.Add(this.lblScore);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.pbMain);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Игра";
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
